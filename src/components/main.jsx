@@ -1,6 +1,9 @@
-var React = require('react');
-var Header = require('./header');
-var Board = require('./board');
+'use strict';
+
+import React from 'react';
+
+import Board from './board';
+import Header from './header';
 
 module.exports = React.createClass({
   render: function() {

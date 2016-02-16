@@ -1,8 +1,10 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var Actions = require('../actions');
-var Reflux = require('reflux');
+'use strict';
+
+import React from 'react';
+import Reflux from 'reflux';
+import Router, { Link } from 'react-router';
+
+import Actions from '../actions';
 
 module.exports = React.createClass({
   render: function() {

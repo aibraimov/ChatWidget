@@ -1,11 +1,48 @@
 'use strict';
-import React from 'react';
+
 import Reflux from 'reflux';
+import React, { PropTypes } from 'react';
+import Router, {Link} from 'react-router';
+import { DragSource } from 'react-dnd';
+
 import Actions from '../actions';
-import NoteStore from '../stores/note-store';
-import ReactRouter from 'react-router';
 import Note from './note';
-const {State, Link} = ReactRouter;
+import NoteStore from '../stores/note-store';
+
+const cardSource = {
+  beginDrag(props) {
+    return {
+      text: props.text
+    };
+  }
+};
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+}
+
+const propTypes = {
+  text: PropTypes.string.isRequired,
+
+  // Injected by React DnD:
+  isDragging: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func.isRequired
+};
+
+class Card {
+  render() {
+    const { isDragging, connectDragSource, text } = this.props;
+    return connectDragSource(
+      <div style={{ opacity: isDragging ? 0.5 : 1 }}>
+        {text}
+      </div>
+    );
+  }
+}
+
+Card.propTypes = propTypes;
 
 module.exports = React.createClass({
   mixins: [

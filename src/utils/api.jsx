@@ -1,4 +1,6 @@
-var Fetch = require('whatwg-fetch');
+'use strict';
+
+import Fetch from 'whatwg-fetch';
 var rootUrl = 'https://api.imgur.com/3/';
 var apiKey = '430d6820d865788';
 
@@ -10,7 +12,7 @@ module.exports = {
       }
     })
     .then(function(response){
-      return response.json()
-    })
+      return response.json();
+    });
   }
 };

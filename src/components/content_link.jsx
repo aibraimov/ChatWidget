@@ -1,9 +1,12 @@
-var React = require('react');
-var Reflux = require('reflux');
-var Actions = require('../actions');
-var ReactRouter = require('react-router');
+'use strict';
+
 import CopyToClipboard from 'react-copy-to-clipboard';
-var Reorder = require('react-reorder');
+import React from 'react';
+import Reflux from 'reflux';
+import Reorder from 'react-reorder';
+import Router, { Link } from 'react-router';
+
+import Actions from '../actions';
 
 module.exports = React.createClass({
     getInitialState: function() {

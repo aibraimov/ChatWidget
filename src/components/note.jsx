@@ -1,10 +1,12 @@
-var React = require('react');
-var Reflux = require('reflux');
-var Actions = require('../actions');
-var ReactRouter = require('react-router');
-var ContentLink = require('./content_link');
+'use strict';
+
 import CopyToClipboard from 'react-copy-to-clipboard';
-var Link = ReactRouter.Link;
+import React from 'react';
+import Reflux from 'reflux';
+import Router, { Link } from 'react-router';
+
+import Actions from '../actions';
+import ContentLink from './content_link';
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -107,7 +109,7 @@ module.exports = React.createClass({
       return (
         <div>
         <ul className="content-links">
-          {this.state.contentLinks.filter(function(x){return x.content_type == type;})
+          {this.state.contentLinks.filter(function(x){return x.content_type === type;})
             .map(this.eachContentLink, this)
           }
         </ul>
