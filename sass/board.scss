@@ -1,0 +1,91 @@
+$board-color1: #eab92d;
+$board-color2: #c79810;
+$brown: 'brown';
+$yellow: 'yellow';
+$black-opacity-02: rgba(0, 0, 0, .2);
+$white-opacity-05: rgba(255, 255, 255, .5);
+
+body,
+html,
+.board {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+@mixin bg-radial($start-colour, $start-position, $end-colour, $end-position) {
+  background: -moz-radial-gradient(center, ellipse cover, $start-colour $start-position, $end-colour $end-position);
+  background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stops($start-position, $start-colour), color-stops($end-position, $end-colour));
+  background: -webkit-radial-gradient(center, ellipse cover, $start-colour $start-position, $end-colour $end-position);
+  background: -o-radial-gradient(center, ellipse cover, $start-colour $start-position, $end-colour $end-position);
+  background: -ms-radial-gradient(center, ellipse cover, $start-colour $start-position, $end-colour $end-position);
+  background: radial-gradient(ellipse at center, $start-colour $start-position, $end-colour $end-position);
+}
+
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+    -moz-box-shadow: inset $top $left $blur $color;
+    -webkit-box-shadow: inset $top $left $blur $color;
+    box-shadow: inset $top $left $blur $color;
+  } @else {
+    -moz-box-shadow: $top $left $blur $color;
+    -webkit-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+  }
+}
+
+.board {
+  @include bg-radial($board-color1, 57%, $board-color2, 99%)
+  background: $board-color1;
+  background-color: $brown;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$board-color1, endColorstr=$board-color2, GradientType=1);
+  width: 100%;
+}
+
+.note {
+  @include box-shadow(5px, 5px, 15px, $black-opacity-02);
+  background-color: $yellow;
+  margin: 2px 0;
+  min-height: 200px;
+  position: relative;
+  width: 550px;
+
+  .p-main {
+    position: relative;
+
+    .p-main-question {
+      font-size: 22px;
+      height: 160px;
+      overflow-x: auto;
+      overflow-y: auto;
+      padding: 5px;
+    }
+
+    .p-main-buttons {
+      display: block;
+      height: 40px;
+      padding-left: 4px;
+      padding-top: 2px;
+    }
+
+    .p-main-buttons > button {
+      margin: 2px;
+    }
+
+    .main-question {
+      background: $white-opacity-05;
+      height: 160px;
+    }
+  }
+}
+
+.glyphicon-plus {
+  position: fixed;
+  right: 0;
+  top: 10px;
+}

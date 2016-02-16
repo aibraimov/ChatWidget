@@ -1,0 +1,16 @@
+$icon-font-path: './node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+@import './node_modules/bootstrap-sass/assets/stylesheets/bootstrap-sprockets';
+@import './node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+$black: 'black';
+
+.black {
+  color: $black;
+}
+
+.clippy {
+  margin-top: -3px;
+  position: relative;
+  top: 3px;
+  width: 13px;
+}
