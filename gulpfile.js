@@ -1,6 +1,7 @@
+'use strict';
 var gulp = require('gulp');
 var babel = require('gulp-babel');
-var babelify = require("babelify");
+var babelify = require('babelify');
 var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
@@ -12,26 +13,27 @@ var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 
-var notify = function(error) {
+var notify = function (error) {
   var message = 'In: ';
   var title = 'Error: ';
 
-  if(error.description) {
+  if (error.description) {
     title += error.description;
   } else if (error.message) {
     title += error.message;
   }
 
-  if(error.filename) {
+  if (error.filename) {
     var file = error.filename.split('/');
-    message += file[file.length-1];
+    message += file[file.length - 1];
   }
 
-  if(error.lineNumber) {
+  if (error.lineNumber) {
     message += '\nOn Line: ' + error.lineNumber;
   }
 
-  notifier.notify({title: title, message: message});
+  notifier.notify({ title: title, message: message });
+  console.log(title);
 };
 
 var bundler = watchify(
@@ -41,9 +43,9 @@ var bundler = watchify(
     debug: true,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: true,
   })
-  .transform(babelify, {presets: ["react", "es2015"]})
+  .transform(babelify)
 );
 
 function bundle() {
@@ -51,28 +53,29 @@ function bundle() {
     .bundle()
     .on('error', notify)
     .pipe(source('main.js'))
-    .pipe(gulp.dest('./'))
+    .pipe(gulp.dest('./'));
 }
-bundler.on('update', bundle)
 
-gulp.task('build', function() {
-  bundle()
+bundler.on('update', bundle);
+
+gulp.task('build', function () {
+  bundle();
 });
 
-gulp.task('serve', function(done) {
+gulp.task('serve', function (done) {
   gulp.src('')
     .pipe(server({
       livereload: {
         enable: true,
-        filter: function(filePath, cb) {
-          if(/main.js/.test(filePath)) {
-            cb(true)
-          } else if(/style.css/.test(filePath)){
-            cb(true)
+        filter: function (filePath, cb) {
+          if (/main.js/.test(filePath)) {
+            cb(true);
+          } else if (/style.css/.test(filePath)) {
+            cb(true);
           }
-        }
+        },
       },
-      open: true
+      open: true,
     }));
 });
 
