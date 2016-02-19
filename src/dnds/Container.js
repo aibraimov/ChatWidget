@@ -1,8 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+'use strict';
+
 import update from 'react/lib/update';
-import Card from './Card';
-import { DropTarget, DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import React, { Component, PropTypes } from 'react';
+import { DropTarget, DragDropContext } from 'react-dnd';
+
+import Card from './Card';
 import ItemTypes from './ItemTypes';
 
 const style = {

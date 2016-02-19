@@ -2,7 +2,6 @@
 
 import Reflux from 'reflux';
 import React, { PropTypes } from 'react';
-import Router, {Link} from 'react-router';
 import { DragSource } from 'react-dnd';
 
 import Actions from '../actions';
@@ -81,9 +80,9 @@ module.exports = React.createClass({
   eachNote: function(note, i) {
       return (
               <Note key={note.id}
-                  index={i}
-                  onChange={this.update}
-                  onRemove={this.remove}
+                index={i}
+                onChange={this.update}
+                onRemove={this.remove}
               >{note.note}</Note>
           );
   },

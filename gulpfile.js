@@ -1,21 +1,18 @@
 'use strict';
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var babelify = require('babelify');
-var gutil = require('gulp-util');
-var source = require('vinyl-source-stream');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var reactify = require('reactify');
-var notifier = require('node-notifier');
-var server = require('gulp-server-livereload');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
-var watch = require('gulp-watch');
 
-var notify = function (error) {
-  var message = 'In: ';
-  var title = 'Error: ';
+const gulp = require('gulp');
+const babelify = require('babelify');
+const source = require('vinyl-source-stream');
+const browserify = require('browserify');
+const watchify = require('watchify');
+const notifier = require('node-notifier');
+const server = require('gulp-server-livereload');
+const concat = require('gulp-concat');
+const sass = require('gulp-sass');
+
+const notify = function notifyError(error) {
+  let message = 'In: ';
+  let title = 'Error: ';
 
   if (error.description) {
     title += error.description;
@@ -24,22 +21,22 @@ var notify = function (error) {
   }
 
   if (error.filename) {
-    var file = error.filename.split('/');
+    const file = error.filename.split('/');
     message += file[file.length - 1];
   }
 
   if (error.lineNumber) {
-    message += '\nOn Line: ' + error.lineNumber;
+    message += `\nOn Line: ${error.lineNumber}`;
   }
 
-  notifier.notify({ title: title, message: message });
+  notifier.notify({ title, message });
   console.log(title);
 };
 
-var bundler = watchify(
+const bundler = watchify(
   browserify({
     entries: ['./src/main.js', './src/app.jsx'],
-    extensions: ['.jsx'],
+    extensions: ['.jsx', '.js'],
     debug: true,
     cache: {},
     packageCache: {},
@@ -58,16 +55,14 @@ function bundle() {
 
 bundler.on('update', bundle);
 
-gulp.task('build', function () {
-  bundle();
-});
+gulp.task('build', () => bundle());
 
-gulp.task('serve', function (done) {
+gulp.task('serve', () =>
   gulp.src('')
     .pipe(server({
       livereload: {
         enable: true,
-        filter: function (filePath, cb) {
+        filter(filePath, cb) {
           if (/main.js/.test(filePath)) {
             cb(true);
           } else if (/style.css/.test(filePath)) {
@@ -76,18 +71,18 @@ gulp.task('serve', function (done) {
         },
       },
       open: true,
-    }));
-});
+    }))
+);
 
-gulp.task('sass', function () {
+gulp.task('sass', () =>
   gulp.src('./sass/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('style.css'))
-    .pipe(gulp.dest('./'));
-});
+    .pipe(gulp.dest('./'))
+);
 
 gulp.task('default', ['build', 'serve', 'sass', 'watch']);
 
-gulp.task('watch', function () {
-  gulp.watch('./sass/**/*.scss', ['sass']);
-});
+gulp.task('watch', () =>
+  gulp.watch('./sass/**/*.scss', ['sass'])
+);
