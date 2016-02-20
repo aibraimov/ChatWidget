@@ -1,13 +1,16 @@
-'use strict';
-
-import React from 'react';
 import Reflux from 'reflux';
+import React, { Component, PropTypes } from 'react';
 import Router, { Link } from 'react-router';
 
 import Actions from '../actions';
 
-module.exports = React.createClass({
-  render: function() {
+export default class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.render = this.render.bind(this);
+  }
+
+  render() {
     return (<nav className="navbar navbar-default header">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
@@ -18,4 +21,7 @@ module.exports = React.createClass({
       </div>
     </nav>);
   }
-});
+}
+
+Header.propTypes = {
+};
