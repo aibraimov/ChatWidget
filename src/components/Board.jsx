@@ -1,9 +1,9 @@
 import Reflux from 'reflux';
 import React, { Component, PropTypes } from 'react';
 
-import Actions from '../actions';
-import Note from './note';
-import NoteStore from '../stores/note-store';
+import Actions from '../Actions';
+import Note from './Note';
+import NoteStore from '../stores/NoteStore';
 
 export default class Board extends Component {
   constructor(props) {

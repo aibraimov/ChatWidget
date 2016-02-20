@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import Board from './board';
-import Header from './header';
+import Board from './Board';
+import Header from './Header';
 
 export default class Main extends Component {
   constructor(props) {

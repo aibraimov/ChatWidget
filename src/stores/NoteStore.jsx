@@ -2,7 +2,7 @@
 
 import Reflux from 'reflux';
 
-import Actions from '../actions';
+import Actions from '../Actions';
 
 module.exports = Reflux.createStore({
   listenables: [Actions],

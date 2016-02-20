@@ -1,10 +1,8 @@
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Api from './utils/api';
-import Routes from './routes';
+import Api from './utils/Api';
+import Routes from './Routes';
 
 //import Dnds from './dnds/index';
 

@@ -2,7 +2,7 @@ import Reflux from 'reflux';
 import React, { Component, PropTypes } from 'react';
 import Router, { Link } from 'react-router';
 
-import Actions from '../actions';
+import Actions from '../Actions';
 
 export default class Header extends Component {
   constructor(props) {

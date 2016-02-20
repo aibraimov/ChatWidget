@@ -37,7 +37,7 @@ const notify = function notifyError(error) {
 
 const bundler = watchify(
   browserify({
-    entries: ['./src/main.js', './src/app.jsx'],
+    entries: ['./src/main.js', './src/App.jsx'],
     extensions: ['.jsx', '.js'],
     debug: true,
     cache: {},

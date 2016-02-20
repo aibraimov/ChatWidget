@@ -1,11 +1,14 @@
+import update from 'react/lib/update';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import HTML5Backend from 'react-dnd-html5-backend';
 import ReactDOM from 'react-dom';
 import Reflux from 'reflux';
 import React, { Component, PropTypes } from 'react';
 import Router, { Link } from 'react-router';
+import { DropTarget, DragDropContext } from 'react-dnd';
 
-import Actions from '../actions';
-import ContentLink from './content_link';
+import Actions from '../Actions';
+import ContentLink from './ContentLink';
 
 export default class Note extends Component {
 

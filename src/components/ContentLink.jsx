@@ -4,7 +4,7 @@ import Reorder from 'react-reorder';
 import React, { Component, PropTypes } from 'react';
 import Router, { Link } from 'react-router';
 
-import Actions from '../actions';
+import Actions from '../Actions';
 
 export default class ContentLink extends Component {
   constructor(props) {
