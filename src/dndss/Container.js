@@ -1,33 +1,19 @@
 import update from 'react/lib/update';
 import HTML5Backend from 'react-dnd-html5-backend';
-import React, { Component, PropTypes } from 'react';
-import { DropTarget, DragDropContext } from 'react-dnd';
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-dnd';
 
 import Card from './Card';
-import ItemTypes from './ItemTypes';
 
 const style = {
   width: 400
 };
 
-const cardTarget = {
-  drop() {
-  }
-};
-
 @DragDropContext(HTML5Backend)
-@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
 export default class Container extends Component {
-  static propTypes = {
-    connectDropTarget: PropTypes.func.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.moveCard = this.moveCard.bind(this);
-    this.findCard = this.findCard.bind(this);
     this.state = {
       cards: [{
         id: 1,
@@ -43,7 +29,7 @@ export default class Container extends Component {
         text: 'Create some examples'
       }, {
         id: 5,
-        text: 'Spam in Twitter and IRC to promote it'
+        text: 'Spam in Twitter and IRC to promote it (note that this element is taller than the others)'
       }, {
         id: 6,
         text: '???'
@@ -54,41 +40,32 @@ export default class Container extends Component {
     };
   }
 
-  moveCard(id, atIndex) {
-    const { card, index } = this.findCard(id);
+  moveCard(dragIndex, hoverIndex) {
+    const { cards } = this.state;
+    const dragCard = cards[dragIndex];
+
     this.setState(update(this.state, {
       cards: {
         $splice: [
-          [index, 1],
-          [atIndex, 0, card]
+          [dragIndex, 1],
+          [hoverIndex, 0, dragCard]
         ]
       }
     }));
   }
 
-  findCard(id) {
-    const { cards } = this.state;
-    const card = cards.filter(c => c.id === id)[0];
-
-    return {
-      card,
-      index: cards.indexOf(card)
-    };
-  }
-
   render() {
-    const { connectDropTarget } = this.props;
     const { cards } = this.state;
 
-    return connectDropTarget(
+    return (
       <div style={style}>
-        {cards.map(card => {
+        {cards.map((card, i) => {
           return (
             <Card key={card.id}
+                  index={i}
                   id={card.id}
                   text={card.text}
-                  moveCard={this.moveCard}
-                  findCard={this.findCard} />
+                  moveCard={this.moveCard} />
           );
         })}
       </div>

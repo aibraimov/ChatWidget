@@ -54,7 +54,7 @@ export default class Board extends Component {
   eachNote(note, i) {
     return (
       <Note key={note.id}
-        index={i}
+        id={i}
         note={note.note}
         onChange={this.update}
         onRemove={this.remove}

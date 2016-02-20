@@ -1,7 +1,6 @@
 import update from 'react/lib/update';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import HTML5Backend from 'react-dnd-html5-backend';
-import ReactDOM from 'react-dom';
 import Reflux from 'reflux';
 import React, { Component, PropTypes } from 'react';
 import Router, { Link } from 'react-router';
@@ -9,11 +8,33 @@ import { DropTarget, DragDropContext } from 'react-dnd';
 
 import Actions from '../Actions';
 import ContentLink from './ContentLink';
+import ItemTypes from './ItemTypes';
 
+const style = {
+  width: 400
+};
+
+const cardTarget = {
+  drop() {
+  }
+};
+
+@DragDropContext(HTML5Backend)
+@DropTarget(ItemTypes.CARD1, cardTarget, connect => ({
+  connectDropTarget1: connect.dropTarget()
+}))
+@DropTarget(ItemTypes.CARD2, cardTarget, connect => ({
+  connectDropTarget2: connect.dropTarget()
+}))
+@DropTarget(ItemTypes.CARD3, cardTarget, connect => ({
+  connectDropTarget3: connect.dropTarget()
+}))
 export default class Note extends Component {
 
   constructor(props) {
     super(props);
+    this.moveCard = this.moveCard.bind(this);
+    this.findCard = this.findCard.bind(this);
     this.componentWillMount = this.componentWillMount.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.edit = this.edit.bind(this);
@@ -38,20 +59,48 @@ export default class Note extends Component {
       ]
     };
   }
+
+
+
+  moveCard(id, atIndex) {
+    const { contentLink, index } = this.findCard(id);
+    this.setState(update(this.state, {
+      contentLinks: {
+        $splice: [
+          [index, 1],
+          [atIndex, 0, contentLink]
+        ]
+      }
+    }));
+    console.log(this.state.contentLinks.map(x => { return x.id }))
+  }
+
+  findCard(id) {
+    const { contentLinks } = this.state;
+    const contentLink = contentLinks.filter(c => c.id === id)[0];
+
+    return {
+      contentLink,
+      index: contentLinks.indexOf(contentLink)
+    };
+  }
+
   componentWillMount() {
   }
+
   componentDidMount() {
     this.uniqueId = 4;
   }
+
   edit() {
     this.setState({ editing: true });
   }
   save() {
-    this.props.onChange(document.getElementById('this-note').value, this.props.index);
+    this.props.onChange(document.getElementById('this-note').value, this.props.id);
     this.setState({ editing: false });
   }
   remove() {
-    this.props.onRemove(this.props.index);
+    this.props.onRemove(this.props.id);
   }
   renderDisplay() {
     return (
@@ -121,12 +170,13 @@ export default class Note extends Component {
   eachContentLink(contentLink) {
     return (
       <ContentLink key={contentLink.id}
-        index={contentLink.id}
+        id={contentLink.id}
         onChange={this.updateContentLink}
         onRemove={this.removeContentLink}
         testValue={contentLink.test_value}
         contentType={contentLink.content_type}
-      />
+        moveCard={this.moveCard}
+        findCard={this.findCard} />
     );
   }
   contentLinks(type) {
@@ -134,7 +184,7 @@ export default class Note extends Component {
       <div>
       <ul className="content-links">
         {
-          this.state.contentLinks.filter((x) => { return x.content_type === type; })
+          this.state.contentLinks.filter(x => { return x.content_type === type; })
           .map(this.eachContentLink, this)
         }
       </ul>
@@ -145,26 +195,30 @@ export default class Note extends Component {
     );
   }
   render() {
+    const { connectDropTarget1, connectDropTarget2, connectDropTarget3 } = this.props;
     return (<div className="note" style={this.style}>
     {this.textForm()}
 
     <hr />
     <h4>Links</h4>
-    {this.contentLinks(0)}
+    {connectDropTarget1(this.contentLinks(0))}
 
     <hr />
     <h4>Iputs</h4>
-    {this.contentLinks(1)}
+    {connectDropTarget2(this.contentLinks(1))}
 
     <hr />
     <h4>Textareas</h4>
-    {this.contentLinks(2)}
+    {connectDropTarget3(this.contentLinks(2))}
   </div>);
   }
 }
 
 Note.propTypes = {
-  index: PropTypes.number.isRequired,
+  connectDropTarget1: PropTypes.func,
+  connectDropTarget2: PropTypes.func,
+  connectDropTarget3: PropTypes.func,
+  id: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
   note: PropTypes.string.isRequired
