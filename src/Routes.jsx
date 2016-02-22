@@ -3,8 +3,10 @@ import { Router, Route, hashHistory } from 'react-router';
 
 import Main from './components/Main';
 
-module.exports = (
+const Routes = (
   <Router history={hashHistory}>
     <Route path="/" component={Main} />
   </Router>
 );
+
+export default Routes;

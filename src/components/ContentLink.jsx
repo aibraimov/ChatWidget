@@ -114,13 +114,15 @@ export default class ContentLink extends Component {
   }
 
   render() {
-    const { index, testValue, contentType } = this.props;
-    let isDragging = null, connectDragSource = null, connectDropTarget = null;
-    if (contentType == 0) {
+    const { id, testValue, contentType } = this.props;
+    let isDragging = null;
+    let connectDragSource = null;
+    let connectDropTarget = null;
+    if (contentType === 0) {
       connectDragSource = this.props.connectDragSource1;
       connectDropTarget = this.props.connectDropTarget1;
       isDragging = this.props.isDragging1;
-    } else if (contentType == 1) {
+    } else if (contentType === 1) {
       connectDragSource = this.props.connectDragSource2;
       connectDropTarget = this.props.connectDropTarget2;
       isDragging = this.props.isDragging2;
@@ -129,13 +131,11 @@ export default class ContentLink extends Component {
       connectDropTarget = this.props.connectDropTarget3;
       isDragging = this.props.isDragging3;
     }
-    console.log(isDragging);
     const opacity = isDragging ? 0 : 1;
 
     if (this.state.editing) {
-
       return connectDragSource(connectDropTarget(<li>
-        <input id={`this-content-id-${index}`} type="text" defaultValue={testValue} />
+        <input id={`this-content-id-${id}`} type="text" defaultValue={testValue} />
         <button onClick={this.save} className="btn btn-success btn-sm glyphicon glyphicon-floppy-disk" />
       </li>));
     }

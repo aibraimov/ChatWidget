@@ -1,18 +1,16 @@
-'use strict';
-
 import Fetch from 'whatwg-fetch';
-var rootUrl = 'https://api.imgur.com/3/';
-var apiKey = '430d6820d865788';
+const rootUrl = 'https://api.imgur.com/3/';
+const apiKey = '430d6820d865788';
 
-module.exports = {
-  get: function(url) {
+const Api = {
+  get(url) {
     return fetch(rootUrl + url, {
       headers: {
-        'Authorization': 'Client-ID ' + apiKey
+        Authorization: `Client-ID ${apiKey}`
       }
     })
-    .then(function(response){
-      return response.json();
-    });
+    .then(response => response.json());
   }
 };
+
+export default Api;

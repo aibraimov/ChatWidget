@@ -61,7 +61,6 @@ export default class Note extends Component {
   }
 
 
-
   moveCard(id, atIndex) {
     const { contentLink, index } = this.findCard(id);
     this.setState(update(this.state, {
@@ -72,7 +71,6 @@ export default class Note extends Component {
         ]
       }
     }));
-    console.log(this.state.contentLinks.map(x => { return x.id }))
   }
 
   findCard(id) {
@@ -145,7 +143,7 @@ export default class Note extends Component {
     return this.uniqueId++;
   }
   addContentLink(event) {
-    const type = parseInt(event.target.getAttribute('data-type'));
+    const type = parseInt(event.target.getAttribute('data-type'), 10);
     const text = 'New content link';
     const { contentLinks } = this.state;
     contentLinks.push({
@@ -153,7 +151,7 @@ export default class Note extends Component {
       test_value: text,
       content_type: type
     });
-    this.setState({ contentLinks: contentLinks });
+    this.setState({ contentLinks });
   }
   removeContentLink(id) {
     const { contentLinks } = this.state;
@@ -176,7 +174,8 @@ export default class Note extends Component {
         testValue={contentLink.test_value}
         contentType={contentLink.content_type}
         moveCard={this.moveCard}
-        findCard={this.findCard} />
+        findCard={this.findCard}
+      />
     );
   }
   contentLinks(type) {
@@ -184,7 +183,7 @@ export default class Note extends Component {
       <div>
       <ul className="content-links">
         {
-          this.state.contentLinks.filter(x => { return x.content_type === type; })
+          this.state.contentLinks.filter(x => x.content_type === type)
           .map(this.eachContentLink, this)
         }
       </ul>

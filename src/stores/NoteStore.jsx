@@ -1,14 +1,14 @@
-'use strict';
-
 import Reflux from 'reflux';
 
 import Actions from '../Actions';
 
-module.exports = Reflux.createStore({
+const NoteStore = Reflux.createStore({
   listenables: [Actions],
-  getNotes: function() {
+  getNotes() {
   },
-  triggerChange: function() {
+  triggerChange() {
     this.trigger('change', this.notes);
   }
 });
+
+export default NoteStore;

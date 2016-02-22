@@ -1,7 +1,7 @@
-'use strict';
-
 import Reflux from 'reflux';
 
-module.exports = Reflux.createActions([
-  'getNotes',
+const Actions = Reflux.createActions([
+  'getNotes'
 ]);
+
+export default Actions;
