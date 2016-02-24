@@ -12,6 +12,14 @@ const style = {
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
   backgroundColor: 'white',
+};
+
+const handleStyle = {
+  backgroundColor: 'green',
+  width: '1rem',
+  height: '1rem',
+  display: 'inline-block',
+  marginRight: '0.75rem',
   cursor: 'move'
 };
 
@@ -54,6 +62,7 @@ const cardTarget = {
 }))
 @DragSource(ItemTypes.CARD1, cardSource, (connect, monitor) => ({
   connectDragSource1: connect.dragSource(),
+  connectDragPreview1: connect.dragPreview(),
   isDragging1: monitor.isDragging()
 }))
 
@@ -62,17 +71,19 @@ const cardTarget = {
 }))
 @DragSource(ItemTypes.CARD2, cardSource, (connect, monitor) => ({
   connectDragSource2: connect.dragSource(),
+  connectDragPreview2: connect.dragPreview(),
   isDragging2: monitor.isDragging()
 }))
 
 @DropTarget(ItemTypes.CARD3, cardTarget, connect => ({
   connectDropTarget3: connect.dropTarget()
 }))
+
 @DragSource(ItemTypes.CARD3, cardSource, (connect, monitor) => ({
   connectDragSource3: connect.dragSource(),
+  connectDragPreview3: connect.dragPreview(),
   isDragging3: monitor.isDragging()
 }))
-
 
 export default class ContentLink extends Component {
   constructor(props) {
@@ -118,28 +129,38 @@ export default class ContentLink extends Component {
     let isDragging = null;
     let connectDragSource = null;
     let connectDropTarget = null;
+    let connectDragPreview = null;
     if (contentType === 0) {
       connectDragSource = this.props.connectDragSource1;
+      connectDragPreview = this.props.connectDragPreview1;
       connectDropTarget = this.props.connectDropTarget1;
       isDragging = this.props.isDragging1;
     } else if (contentType === 1) {
       connectDragSource = this.props.connectDragSource2;
+      connectDragPreview = this.props.connectDragPreview2;
       connectDropTarget = this.props.connectDropTarget2;
       isDragging = this.props.isDragging2;
     } else {
       connectDragSource = this.props.connectDragSource3;
+      connectDragPreview = this.props.connectDragPreview3;
       connectDropTarget = this.props.connectDropTarget3;
       isDragging = this.props.isDragging3;
     }
     const opacity = isDragging ? 0 : 1;
 
     if (this.state.editing) {
-      return connectDragSource(connectDropTarget(<li>
+      return connectDropTarget(connectDragPreview(<li style={{ ...style, opacity }}>
+        {connectDragSource(
+          <div style={handleStyle} />
+        )}
         <input id={`this-content-id-${id}`} type="text" defaultValue={testValue} />
         <button onClick={this.save} className="btn btn-success btn-sm glyphicon glyphicon-floppy-disk" />
       </li>));
     }
-    return connectDragSource(connectDropTarget(<li style={{ ...style, opacity }}>
+    return connectDropTarget(connectDragPreview(<li style={{ ...style, opacity }}>
+      {connectDragSource(
+        <div style={handleStyle} />
+      )}
       {testValue}
       <button onClick={this.edit}
         className="btn btn-primary glyphicon glyphicon-pencil" title="Изменить"
@@ -157,7 +178,7 @@ export default class ContentLink extends Component {
 }
 
 ContentLink.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
   testValue: PropTypes.string.isRequired,
@@ -165,12 +186,15 @@ ContentLink.propTypes = {
   findCard: PropTypes.func.isRequired,
   contentType: PropTypes.number.isRequired,
   connectDragSource1: PropTypes.func,
+  connectDragPreview1: PropTypes.func,
   connectDropTarget1: PropTypes.func,
   isDragging1: PropTypes.bool,
   connectDragSource2: PropTypes.func,
+  connectDragPreview2: PropTypes.func,
   connectDropTarget2: PropTypes.func,
   isDragging2: PropTypes.bool,
   connectDragSource3: PropTypes.func,
+  connectDragPreview3: PropTypes.func,
   connectDropTarget3: PropTypes.func,
   isDragging3: PropTypes.bool
 };

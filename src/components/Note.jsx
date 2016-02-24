@@ -7,11 +7,10 @@ import Router, { Link } from 'react-router';
 import { DropTarget, DragDropContext } from 'react-dnd';
 
 import Actions from '../Actions';
-import ContentLink from './ContentLink';
+import Form from './Form';
 import ItemTypes from './ItemTypes';
 
 const style = {
-  width: 400
 };
 
 const cardTarget = {
@@ -20,14 +19,8 @@ const cardTarget = {
 };
 
 @DragDropContext(HTML5Backend)
-@DropTarget(ItemTypes.CARD1, cardTarget, connect => ({
-  connectDropTarget1: connect.dropTarget()
-}))
-@DropTarget(ItemTypes.CARD2, cardTarget, connect => ({
-  connectDropTarget2: connect.dropTarget()
-}))
-@DropTarget(ItemTypes.CARD3, cardTarget, connect => ({
-  connectDropTarget3: connect.dropTarget()
+@DropTarget(ItemTypes.FORM, cardTarget, connect => ({
+  connectDropTargetForm: connect.dropTarget()
 }))
 export default class Note extends Component {
 
@@ -44,42 +37,39 @@ export default class Note extends Component {
     this.renderForm = this.renderForm.bind(this);
     this.textForm = this.textForm.bind(this);
     this.nextId = this.nextId.bind(this);
-    this.addContentLink = this.addContentLink.bind(this);
-    this.removeContentLink = this.removeContentLink.bind(this);
-    this.updateContentLink = this.updateContentLink.bind(this);
-    this.eachContentLink = this.eachContentLink.bind(this);
-    this.contentLinks = this.contentLinks.bind(this);
+    this.addForm = this.addForm.bind(this);
+    this.removeForm = this.removeForm.bind(this);
+    this.eachForm = this.eachForm.bind(this);
     this.render = this.render.bind(this);
     this.state = {
-      editing: false, contentLinks:
-      [
-        { id: 1, test_value: 'a', content_type: 0 },
-        { id: 2, test_value: 'b', content_type: 1 },
-        { id: 3, test_value: 'c', content_type: 2 }
+      editing: false,
+      forms: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 }
       ]
     };
   }
 
-
   moveCard(id, atIndex) {
-    const { contentLink, index } = this.findCard(id);
+    const { form, index } = this.findCard(id);
     this.setState(update(this.state, {
-      contentLinks: {
+      forms: {
         $splice: [
           [index, 1],
-          [atIndex, 0, contentLink]
+          [atIndex, 0, form]
         ]
       }
     }));
   }
 
   findCard(id) {
-    const { contentLinks } = this.state;
-    const contentLink = contentLinks.filter(c => c.id === id)[0];
+    const { forms } = this.state;
+    const form = forms.filter(c => c.id === id)[0];
 
     return {
-      contentLink,
-      index: contentLinks.indexOf(contentLink)
+      form,
+      index: forms.indexOf(form)
     };
   }
 
@@ -142,81 +132,56 @@ export default class Note extends Component {
     this.uniqueId = this.uniqueId || 0;
     return this.uniqueId++;
   }
-  addContentLink(event) {
-    const type = parseInt(event.target.getAttribute('data-type'), 10);
-    const text = 'New content link';
-    const { contentLinks } = this.state;
-    contentLinks.push({
-      id: this.nextId(),
-      test_value: text,
-      content_type: type
+  addForm() {
+    const { forms } = this.state;
+    forms.push({
+      id: this.nextId()
     });
-    this.setState({ contentLinks });
+    this.setState({ forms });
   }
-  removeContentLink(id) {
-    const { contentLinks } = this.state;
-    const index = window.findWithAttr(contentLinks, 'id', id);
-    contentLinks.splice(index, 1);
-    this.setState({ contentLinks });
+  removeForm(id) {
+    const { forms } = this.state;
+    const index = window.findWithAttr(forms, 'id', id);
+    forms.splice(index, 1);
+    this.setState({ forms });
   }
-  updateContentLink(newText, id) {
-    const { contentLinks } = this.state;
-    const index = window.findWithAttr(contentLinks, 'id', id);
-    contentLinks[index].test_value = newText;
-    this.setState({ contentLinks });
-  }
-  eachContentLink(contentLink) {
+  eachForm(form) {
     return (
-      <ContentLink key={contentLink.id}
-        id={contentLink.id}
-        onChange={this.updateContentLink}
-        onRemove={this.removeContentLink}
-        testValue={contentLink.test_value}
-        contentType={contentLink.content_type}
+      <Form key={form.id}
+        id={form.id}
+        onChange={this.updateForm}
+        onRemove={this.removeForm}
         moveCard={this.moveCard}
         findCard={this.findCard}
       />
     );
   }
-  contentLinks(type) {
-    return (
-      <div>
-      <ul className="content-links">
-        {
-          this.state.contentLinks.filter(x => x.content_type === type)
-          .map(this.eachContentLink, this)
-        }
-      </ul>
-      <button className="btn btn-sm btn-success glyphicon glyphicon-plus"
-        onClick={this.addContentLink} data-type={type}
-      />
-      </div>
-    );
-  }
   render() {
-    const { connectDropTarget1, connectDropTarget2, connectDropTarget3 } = this.props;
-    return (<div className="note" style={this.style}>
-    {this.textForm()}
+    const { connectDropTargetForm } = this.props;
+    return (
+      <div className="note" style={this.style}>
+        {this.textForm()}
 
-    <hr />
-    <h4>Links</h4>
-    {connectDropTarget1(this.contentLinks(0))}
-
-    <hr />
-    <h4>Iputs</h4>
-    {connectDropTarget2(this.contentLinks(1))}
-
-    <hr />
-    <h4>Textareas</h4>
-    {connectDropTarget3(this.contentLinks(2))}
-  </div>);
+        <hr />
+        <h4>Forms</h4>
+        {connectDropTargetForm(
+          <div>
+          <ul className="content-links">
+            {
+              this.state.forms.map(this.eachForm, this)
+            }
+          </ul>
+          <button className="btn btn-sm btn-success glyphicon glyphicon-plus"
+            onClick={this.addForm}
+          />
+          </div>
+        )}
+      </div>);
   }
 }
 
 Note.propTypes = {
-  connectDropTarget1: PropTypes.func,
-  connectDropTarget2: PropTypes.func,
-  connectDropTarget3: PropTypes.func,
+  connectDropTargetForm: PropTypes.func,
   id: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
